@@ -1,0 +1,39 @@
+This is a quick and dirty example of how to use the inflection
+server.  Note: it does string copies and prints strings without
+checking lengths carefully and without verifying that the
+characters are all printable.  However, the buffers are much
+larger than the example prompts and replies, so there won't be
+a problem unless you purposefully to cause one.
+
+To try communication, use two computers.  You can choose two in
+the Xinu lab, say xinu11.cs.purdue.edu and xinu12.cs.purdue.edu.
+
+Use a separate window for each.  Fortunately, you will have the
+same home directory across all machines, so the files are shared
+
+On one computer type:
+
+	./example_reg  UUUU  xxx yyy
+
+where UUUU is your career account login, and xxx and yyy are arbitrary
+strings (you can actually use xxx and yyy for the test).
+
+On the other computer, type:
+
+	./example_acc  UUUU  xxx yyy
+
+where the arguments are *exactly* the same as above.
+
+The two programs should contact one another, exchange messages,
+and display the results.  You can try modifying the prompt in the
+access message.  You can also register multiple services
+simultaneously, such as running 
+
+
+	./example_reg  UUUU  xxx serv1 &
+
+	./example_reg  UUUU  xxx serv2
+
+Then try accessing them.
+
+
