@@ -174,7 +174,7 @@ main(int argc, char *argv[]) {
 
     write(sock, &req_msg, dataSize + sizeof (struct app_comm_msg_header));
 
-    fprintf(stderr, "\nacc side -> sent data:\n");
+    fprintf(stderr, "\nacc side -> sent acc req\n");
 
     /* Read the reply from the service app */
     struct app_comm_msg reply_msg;
@@ -213,7 +213,7 @@ main(int argc, char *argv[]) {
 
 
     /* Data arrived -- print it */
-
+    fprintf(stderr, "\nResponse:\n");
     print_app_comm_data(&reply_msg);
 
 

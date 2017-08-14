@@ -319,7 +319,7 @@ main(int argc, char *argv[]) {
         }
 
 
-        printf("Sending: \n");
+        printf("Sending: ");
         print_app_comm_data(&reply_msg);
         printf("\n\n");
         //put leading ints in network byte order
