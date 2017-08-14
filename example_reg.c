@@ -130,7 +130,60 @@ main(int argc, char *argv[]) {
         socin.sin_port = htons((unsigned short) TCPPORT);
         ppe = getprotobyname("tcp");
 
-        /* Create the socket */
+        /* Create the socket to clear prev registration 
+         * (clear seems to close client socket which is why we need to create a separate socket for this from registration) */
+
+        sock = socket(PF_INET, SOCK_STREAM, ppe->p_proto);
+        if (sock < 0) {
+            fprintf(stderr, "cannot create socket\n");
+            exit(1);
+        }
+
+        /* Connect the socket */
+
+        if (connect(sock, (struct sockaddr *) &socin, sizeof (socin)) < 0) {
+            fprintf(stderr, "can't connect to port %d\n", TCPPORT);
+            exit(1);
+        }
+
+        /* Form an connection clear command and send */
+
+        pcmd = (struct cmd *) buffer;
+        pcmd->cmdtype = CMD_CLEAR;
+
+        /* Add user ID */
+
+        len = strlen(user);
+        memset(pcmd->cid, ' ', UID_SIZ);
+        memcpy(pcmd->cid, user, len);
+
+        pcmd->cslash1 = '/';
+
+        /* Add password */
+
+        len = strlen(pass);
+        memset(pcmd->cpass, ' ', PASS_SIZ);
+        memcpy(pcmd->cpass, pass, len);
+
+        pcmd->cslash2 = '/';
+
+        /* Add service */
+
+        memset(pcmd->csvc, ' ', SVC_SIZ);
+        if (svc != NULL) {
+            len = strlen(svc);
+            memcpy(pcmd->csvc, svc, len);
+        }
+
+        pcmd->dollar = '$';
+
+        /* Send connection clear message */
+
+        send(sock, buffer, sizeof (struct cmd), 0);
+
+        n = read(sock, buffer, sizeof (buffer)); //Read and discard server response.
+
+        /* Create the socket to register*/
 
         sock = socket(PF_INET, SOCK_STREAM, ppe->p_proto);
         if (sock < 0) {
@@ -177,6 +230,7 @@ main(int argc, char *argv[]) {
         /* Send registration message */
 
         send(sock, buffer, sizeof (struct cmd), 0);
+
 
         /* Wait for access app to respond by sending data */
 

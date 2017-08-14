@@ -39,14 +39,37 @@ Then try accessing them.
 
 
 
-//Modifications
+// 08/14/17 Modifications + Helpful Notes
+
+When accessing an embedded system:
 
 access variables - username, pass, embedded_sys_name, action, [data]
+
+username, pass are the same as above. I chose to register each system as a service 
+and then pass an additional action to the system, which determines what data the requesting client 
+gets back.
+
+Example:
 
 Get Temp
     /example_acc chaudhu1 pass pi 1 payload_string
 Get Time
     /example_acc chaudhu1 pass pi 2 payload_string
+
+
+
+Note #1: 
+To prevent any issues with registering I made the following design choices:
+- Before registering a system/service I send a clear message
+- The inflection server will close the embedded system socket when a client 
+    tries access the device and closes its socket. Therefore, one must reconnect the embedded system after 
+    serving data to the inflection server. I chose to also make a call to deregister the service prior to reconnecting
+    again as a safeguard to prevent leaking a slot.
+
+
+
+
+
 
 //
 
