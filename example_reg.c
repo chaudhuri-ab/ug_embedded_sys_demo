@@ -187,12 +187,15 @@ main(int argc, char *argv[]) {
 
         if (n < 0) {
             fprintf(stderr, "error reading from the socket\n");
+            close(sock);
             continue;
         } else if (n == 0) {
             fprintf(stderr, "\nacc side -> TCP connection was closed before a reply arrived.\n");
+            close(sock);
             continue;
         } else if (n < sizeof (req_msg.header)) {
             fprintf(stderr, "\nError Reading Header.\n");
+            close(sock);
             continue;
         }
 
@@ -208,12 +211,15 @@ main(int argc, char *argv[]) {
 
             if (n < 0) {
                 fprintf(stderr, "error reading from the socket\n");
+                close(sock);
                 continue;
             } else if (n == 0) {
                 fprintf(stderr, "\nacc side -> TCP connection was closed before a reply arrived.\n");
+                close(sock);
                 continue;
             } else if (n < req_msg.header.size) {
                 fprintf(stderr, "\nDid not get full message.\n");
+                close(sock);
                 continue;
             }
 
@@ -233,7 +239,7 @@ main(int argc, char *argv[]) {
 
                 reply_msg.header.action = GET_TEMP;
                 reply_msg.header.size = 100;
-                clk(reply_msg.data, 100);
+                temp(reply_msg.data, 100);
 
 
             }
@@ -246,7 +252,7 @@ main(int argc, char *argv[]) {
 
                 reply_msg.header.action = GET_TIME;
                 reply_msg.header.size = 100;
-                temp(reply_msg.data, 100);
+                clk(reply_msg.data, 100);
 
 
             }
@@ -261,6 +267,7 @@ main(int argc, char *argv[]) {
 
         printf("Sending: \n");
         print_app_comm_data(&reply_msg);
+        printf("\n\n");
         //put leading ints in network byte order
         int dataSize = reply_msg.header.size; //store size in host order
         reply_msg.header.action = htonl(reply_msg.header.action);

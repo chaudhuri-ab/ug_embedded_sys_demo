@@ -37,3 +37,16 @@ simultaneously, such as running
 Then try accessing them.
 
 
+
+
+//Modifications
+
+access variables - username, pass, embedded_sys_name, action, [data]
+
+Get Temp
+    /example_acc chaudhu1 pass pi 1 payload_string
+Get Time
+    /example_acc chaudhu1 pass pi 2 payload_string
+
+//
+
