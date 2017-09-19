@@ -39,8 +39,8 @@ struct cmd { /* format of a command			*/
 #pragma pack(push, 1) // exact fit - no padding
 
 struct app_comm_msg_header {
-    int size; /*size of comm data excluding header*/
-    int action;
+    unsigned short size; /*size of comm data excluding header*/
+    unsigned char action;
 };
 
 struct app_comm_msg {

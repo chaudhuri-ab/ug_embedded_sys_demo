@@ -30,9 +30,11 @@
 #include <netdb.h>
 #include <string.h>
 #include <time.h>
+#include <arpa/inet.h>
 
 
 #include "inflection.h"
+#include "utils.h"
 
 #ifndef INADDR_NONE
 #define INADDR_NONE 0xffffffff
@@ -58,7 +60,7 @@ void temp(char*, size_t len);
 /********************************************************************************/
 
 
-main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
 
 #ifdef SYS_LIL_ENDIAN 
     printf("lil endian\n");
@@ -254,8 +256,8 @@ main(int argc, char *argv[]) {
         }
 
         //Convert to host byte order
-        req_msg.header.size = ntohl(req_msg.header.size);
-        req_msg.header.action = ntohl(req_msg.header.action);
+        req_msg.header.size = ntohs(req_msg.header.size);
+        req_msg.header.action = req_msg.header.action;
 
         //Get Data
 
@@ -324,8 +326,8 @@ main(int argc, char *argv[]) {
         printf("\n\n");
         //put leading ints in network byte order
         int dataSize = reply_msg.header.size; //store size in host order
-        reply_msg.header.action = htonl(reply_msg.header.action);
-        reply_msg.header.size = htonl(reply_msg.header.size);
+        reply_msg.header.action = reply_msg.header.action;
+        reply_msg.header.size = htons(reply_msg.header.size);
 
         write(sock, &reply_msg, dataSize + sizeof (struct app_comm_msg_header));
         close(sock);

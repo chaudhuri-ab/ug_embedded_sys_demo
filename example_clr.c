@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <string.h>
+#include <arpa/inet.h>
 
 #include "inflection.h"
 
@@ -41,7 +42,7 @@
 /*										*/
 /********************************************************************************/
 
-main (int argc, char *argv[]) {
+int main (int argc, char *argv[]) {
 
 	int		i;			/* loop index			*/
 	int		n;			/* number of chars read		*/

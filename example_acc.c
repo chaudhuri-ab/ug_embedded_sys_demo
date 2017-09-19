@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <string.h>
+#include <arpa/inet.h>
 
 #include "inflection.h"
 #include "utils.h"
@@ -45,7 +46,7 @@
 /********************************************************************************/
 
 
-main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
 
     int i; /* loop index			*/
     int n; /* number of chars read		*/
@@ -169,8 +170,8 @@ main(int argc, char *argv[]) {
     print_app_comm_data(&req_msg);
     //put leading ints in network byte order
     dataSize = req_msg.header.size; //store size in host order
-    req_msg.header.action = htonl(req_msg.header.action);
-    req_msg.header.size = htonl(req_msg.header.size);
+    req_msg.header.action = req_msg.header.action;
+    req_msg.header.size = htons(req_msg.header.size);
 
     write(sock, &req_msg, dataSize + sizeof (struct app_comm_msg_header));
 
@@ -191,8 +192,8 @@ main(int argc, char *argv[]) {
         exit(0);
     }
 
-    reply_msg.header.size = ntohl(reply_msg.header.size);
-    reply_msg.header.action = ntohl(reply_msg.header.action);
+    reply_msg.header.size = ntohs(reply_msg.header.size);
+    reply_msg.header.action = reply_msg.header.action;
 
     if (reply_msg.header.size > 0) {
         //Read rest of message excluding size 
